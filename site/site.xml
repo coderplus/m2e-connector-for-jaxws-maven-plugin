@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<description name="m2e connector for jaxws-maven-plugin">
+		m2E connector for jaxws-maven-plugin
+	</description>
+	<feature url="features/com.coderplus.m2e.jaxws_0.0.0.qualifier.jar"
+			id="com.coderplus.m2e.jaxws"
+			version="0.0.0">
+		<category name="m2e-connector-for-jaxws-maven-plugin"/>
+	</feature>
+	<category-def name="m2e-connector-for-jaxws-maven-plugin" label="CoderPlus M2E Connectors">
+      <description>
+         m2e connector for jaxws-maven-plugin
+      </description>
+   </category-def>
+</site>

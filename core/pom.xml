@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.coderplus.m2e</groupId>
+		<artifactId>com.coderplus.m2e.jaxwsparent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>com.coderplus.m2e.jaxwscore</artifactId>
+	<packaging>eclipse-plugin</packaging>
+
+	<name>m2e connector for jaxws-maven-plugin (core)</name>
+
+</project>
