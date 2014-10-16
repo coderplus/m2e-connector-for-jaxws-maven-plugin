@@ -14,7 +14,7 @@ First off, note that this is currently Beta code.  It has been minimally tested,
 warnings apply.  That said if you're willing to help test the connector all you have to do is:
 
 1. Drag the Install button into your eclipse workspace to install the connector from the Eclipse Market place
-[![Install the Connector](http://marketplace.eclipse.org/sites/all/modules/custom/marketplace/images/installbutton.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1936167)
+[![Install the Connector](http://marketplace.eclipse.org/sites/all/modules/custom/marketplace/images/installbutton.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1965968)
 
 or use the  [update site](http://coderplus.com/m2e-update-sites/jaxws-maven-plugin/)
 
