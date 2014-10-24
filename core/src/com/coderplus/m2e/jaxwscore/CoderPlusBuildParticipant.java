@@ -61,9 +61,10 @@ public class CoderPlusBuildParticipant extends MojoExecutionBuildParticipant {
 			Scanner bindingScanner = buildContext.newScanner(bindingDirectory); 
 			String[] includedBindingFiles= null;
 			String[] includedWsdlFiles  = null;
-			if(bindingScanner!= null){}
-			bindingScanner.scan();
-			includedBindingFiles = bindingScanner.getIncludedFiles();
+			if(bindingScanner!= null){
+				bindingScanner.scan();
+				includedBindingFiles = bindingScanner.getIncludedFiles();
+			}
 			if (wsdlScanner != null) {
 				wsdlScanner.scan();
 				includedWsdlFiles = wsdlScanner.getIncludedFiles();
