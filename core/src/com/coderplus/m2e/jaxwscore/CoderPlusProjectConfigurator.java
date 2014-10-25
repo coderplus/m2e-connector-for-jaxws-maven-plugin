@@ -24,11 +24,10 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectUtils;
 import org.eclipse.m2e.core.project.configurator.AbstractBuildParticipant;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
-import org.eclipse.m2e.jdt.AbstractJavaProjectConfigurator;
+import org.eclipse.m2e.jdt.AbstractSourcesGenerationProjectConfigurator;
 import org.eclipse.m2e.jdt.IClasspathDescriptor;
 
-@SuppressWarnings("deprecation")
-public class CoderPlusProjectConfigurator extends AbstractJavaProjectConfigurator {
+public class CoderPlusProjectConfigurator extends AbstractSourcesGenerationProjectConfigurator {
 
 	private static final String OUTPUT_DIRECTORY = "sourceDestDir";
 	private static final String WSIMPORT_TEST = "wsimport-test";
