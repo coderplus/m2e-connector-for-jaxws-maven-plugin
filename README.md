@@ -45,4 +45,4 @@ Thanks for asking...
 
 ## Thanks ##
 
-Many thanks to the folks from the m2e-dev mailing list 
+Many thanks to the folks from the m2e-dev mailing list, especially [Igor Federenko](https://github.com/ifedorenko)
