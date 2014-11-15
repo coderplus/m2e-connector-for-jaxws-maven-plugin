@@ -52,7 +52,7 @@ public class CoderPlusProjectConfigurator extends AbstractSourcesGenerationProje
 			boolean xnocompile = Boolean.TRUE.equals(maven.getMojoParameterValue(mavenProject, execution, XNOCOMPILE,Boolean.class, new NullProgressMonitor()));
 			boolean keep = Boolean.TRUE.equals(maven.getMojoParameterValue(mavenProject, execution, KEEP,Boolean.class, new NullProgressMonitor()));
 			File outputDirectory = maven.getMojoParameterValue(mavenProject, execution, OUTPUT_DIRECTORY,File.class, new NullProgressMonitor());
-			if(keep || xnocompile){
+			if((keep || xnocompile) && outputDirectory != null){
 				if(WSIMPORT_TEST.equals(execution.getGoal()) || WSGEN_TEST.equals(execution.getGoal())){
 					IPath relativeSourcePath = MavenProjectUtils.getProjectRelativePath(project,outputDirectory.getAbsolutePath());
 					classpath.addSourceEntry(project.getFullPath().append(relativeSourcePath),facade.getTestOutputLocation(), true);
