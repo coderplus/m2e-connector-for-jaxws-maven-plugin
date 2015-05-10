@@ -10,6 +10,7 @@ package com.coderplus.m2e.jaxwscore;
  * Aneesh Joseph(coderplus.com)
  *******************************************************************************/
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecution;
@@ -26,7 +27,8 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 
 public class CoderPlusBuildParticipant extends MojoExecutionBuildParticipant {
 
-	private static final String STALE_FILE = "staleFile";
+	private static final String WSGEN = "wsgen";
+	private static final String WSIMPORT = "wsimport";
 	private static final String WSDL_DIRECTORY = "wsdlDirectory";
 	private static final String BINDING_DIRECTORY = "bindingDirectory";
 	private static final String OUTPUT_DIRECTORY = "sourceDestDir";
@@ -50,32 +52,42 @@ public class CoderPlusBuildParticipant extends MojoExecutionBuildParticipant {
 		if (execution == null) {
 			return null;
 		}
-		IMaven maven = MavenPlugin.getMaven();	
+		String goal = execution.getGoal();
+		IMaven maven = MavenPlugin.getMaven();
 		MavenProject mavenProject = getMavenProjectFacade().getMavenProject();
 		final BuildContext buildContext = getBuildContext();
+		if(buildContext.isIncremental() && (WSGEN_TEST.equals(goal) || WSGEN.equals(goal))){
+			//execute wsgen/wsgen-test on full builds only
+			return null;
+		}
+
 		boolean skip = Boolean.TRUE.equals(maven.getMojoParameterValue(mavenProject, execution, SKIP,Boolean.class, new NullProgressMonitor()));
 		if(skip){
 			return null;
 		}
-		File staleFile = maven.getMojoParameterValue(mavenProject, execution, STALE_FILE, File.class, new NullProgressMonitor());
-
 		boolean xnocompile = Boolean.TRUE.equals(maven.getMojoParameterValue(mavenProject, execution, XNOCOMPILE,Boolean.class, new NullProgressMonitor()));
 		boolean keep = Boolean.TRUE.equals(maven.getMojoParameterValue(mavenProject, execution, KEEP,Boolean.class, new NullProgressMonitor()));
 		File outputDirectory = maven.getMojoParameterValue(mavenProject, execution, OUTPUT_DIRECTORY,File.class, new NullProgressMonitor());
-		if((keep || xnocompile) && outputDirectory != null){
-			if(WSIMPORT_TEST.equals(execution.getGoal()) || WSGEN_TEST.equals(execution.getGoal())){
-				mavenProject.addTestCompileSourceRoot(outputDirectory.getAbsolutePath());
+		Set<File> refreshableDirectories = new HashSet<File>();
+		if(outputDirectory != null){
+			refreshableDirectories.add(outputDirectory);
+			if((keep || xnocompile)){
+				if(WSIMPORT_TEST.equals(goal)){
+					mavenProject.addTestCompileSourceRoot(outputDirectory.getAbsolutePath());
 
-			} else {
-				mavenProject.addCompileSourceRoot(outputDirectory.getAbsolutePath());
+				} else if(WSIMPORT.equals(goal)){
+					mavenProject.addCompileSourceRoot(outputDirectory.getAbsolutePath());
+				}
 			}
 		}
 
-		if(buildContext.isIncremental() && staleFile!= null && staleFile.exists()){
+
+		if(buildContext.isIncremental()){
+			//goal is either wsimport/wsimport-test
 			File wsdlDirectory = maven.getMojoParameterValue(mavenProject, execution, WSDL_DIRECTORY, File.class, new NullProgressMonitor());
 			File bindingDirectory = maven.getMojoParameterValue(mavenProject, execution, BINDING_DIRECTORY, File.class, new NullProgressMonitor());
-			Scanner wsdlScanner = buildContext.newScanner(wsdlDirectory); 
-			Scanner bindingScanner = buildContext.newScanner(bindingDirectory); 
+			Scanner wsdlScanner = buildContext.newScanner(wsdlDirectory);
+			Scanner bindingScanner = buildContext.newScanner(bindingDirectory);
 			String[] includedBindingFiles= null;
 			String[] includedWsdlFiles  = null;
 			if(bindingScanner!= null){
@@ -96,10 +108,19 @@ public class CoderPlusBuildParticipant extends MojoExecutionBuildParticipant {
 		setTaskName(monitor);
 		//execute the maven mojo
 		final Set<IProject> result = executeMojo(kind, monitor);
+		File destinationDirectory = maven.getMojoParameterValue(mavenProject, execution, "destDir", File.class, new NullProgressMonitor());
+		if(destinationDirectory!= null){
+			refreshableDirectories.add(destinationDirectory);
+		}
+		File resourceDestinationDirectory = maven.getMojoParameterValue(mavenProject, execution, "resourceDestDir", File.class, new NullProgressMonitor());
+		if(resourceDestinationDirectory != null){
+			refreshableDirectories.add(resourceDestinationDirectory);
+		}
 
-		//refresh the output directory
-		if(outputDirectory != null && outputDirectory.exists()){
-			buildContext.refresh(outputDirectory);
+		for(File refreshableDirectory : refreshableDirectories){
+			if(refreshableDirectory.exists()){
+				buildContext.refresh(refreshableDirectory);
+			}
 		}
 		return result;
 	}

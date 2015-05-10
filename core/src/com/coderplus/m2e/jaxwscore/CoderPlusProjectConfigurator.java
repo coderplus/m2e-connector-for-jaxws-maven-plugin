@@ -29,9 +29,9 @@ import org.eclipse.m2e.jdt.IClasspathDescriptor;
 
 public class CoderPlusProjectConfigurator extends AbstractSourcesGenerationProjectConfigurator {
 
+	private static final String WSIMPORT = "wsimport";
 	private static final String OUTPUT_DIRECTORY = "sourceDestDir";
 	private static final String WSIMPORT_TEST = "wsimport-test";
-	private static final String WSGEN_TEST = "wsgen-test";
 	private static final String XNOCOMPILE = "xnocompile";
 	private static final String KEEP = "keep";
 
@@ -53,11 +53,11 @@ public class CoderPlusProjectConfigurator extends AbstractSourcesGenerationProje
 			boolean keep = Boolean.TRUE.equals(maven.getMojoParameterValue(mavenProject, execution, KEEP,Boolean.class, new NullProgressMonitor()));
 			File outputDirectory = maven.getMojoParameterValue(mavenProject, execution, OUTPUT_DIRECTORY,File.class, new NullProgressMonitor());
 			if((keep || xnocompile) && outputDirectory != null){
-				if(WSIMPORT_TEST.equals(execution.getGoal()) || WSGEN_TEST.equals(execution.getGoal())){
+				if(WSIMPORT_TEST.equals(execution.getGoal())){
 					IPath relativeSourcePath = MavenProjectUtils.getProjectRelativePath(project,outputDirectory.getAbsolutePath());
 					classpath.addSourceEntry(project.getFullPath().append(relativeSourcePath),facade.getTestOutputLocation(), true);
 
-				} else {
+				} else if(WSIMPORT.equals(execution.getGoal())) {
 					IPath relativeSourcePath = MavenProjectUtils.getProjectRelativePath(project,outputDirectory.getAbsolutePath());
 					classpath.addSourceEntry(project.getFullPath().append(relativeSourcePath),facade.getOutputLocation(), true);
 				}
